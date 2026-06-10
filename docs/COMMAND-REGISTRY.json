@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "totalCommands": 84,
+  "totalCommands": 85,
   "commands": [
     {
       "command": "aside",
@@ -386,6 +386,15 @@
         "tdd-workflow"
       ],
       "path": "commands/kotlin-test.md"
+    },
+    {
+      "command": "lab",
+      "description": "Submit work to the ECC + Claw autonomous lab and inspect running workflows from any harness.",
+      "type": "orchestration",
+      "primaryAgents": [],
+      "allAgents": [],
+      "skills": [],
+      "path": "commands/lab.md"
     },
     {
       "command": "learn-eval",
@@ -925,7 +934,7 @@
     "byType": {
       "build": 2,
       "general": 7,
-      "orchestration": 11,
+      "orchestration": 12,
       "planning": 2,
       "refactoring": 1,
       "review": 9,
