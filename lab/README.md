@@ -1,6 +1,6 @@
-# ECC + Claw Autonomous Lab
+# aeon-lab
 
-Unified zero-human autonomous workgroup. Fuses the ECC agent/skill/eval fabric with Claw-AI-Lab's 26-stage research pipeline, layered with Temporal (durable workflows), LangGraph (per-stage state machines), an MCP security broker, tiered sandboxes, cost-aware model routing, and end-to-end eval + observability + provenance.
+Unified zero-human autonomous workgroup (ECC + Claw). Fuses the ECC agent/skill/eval fabric with Claw-AI-Lab's 26-stage research pipeline, layered with Temporal (durable workflows), LangGraph (per-stage state machines), an MCP security broker, tiered sandboxes, cost-aware model routing, and end-to-end eval + observability + provenance.
 
 ## Subsystems
 
