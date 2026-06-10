@@ -190,6 +190,7 @@ commands:
   - kotlin-build
   - kotlin-review
   - kotlin-test
+  - lab
   - learn
   - learn-eval
   - loop-start

@@ -138,7 +138,7 @@ function runTests() {
       assert.ok(!fs.existsSync(path.join(projectDir, '.cursor', 'rules', 'README.mdc')));
       assert.ok(fs.existsSync(path.join(projectDir, '.cursor', 'agents', 'ecc-architect.md')));
       assert.ok(!fs.existsSync(path.join(projectDir, '.cursor', 'agents', 'architect.md')));
-      assert.ok(fs.existsSync(path.join(projectDir, '.cursor', 'commands', 'plan.md')));
+      assert.ok(fs.existsSync(path.join(projectDir, '.cursor', 'commands', 'lab.md')));
       assert.ok(fs.existsSync(path.join(projectDir, '.cursor', 'hooks.json')));
       assert.ok(fs.existsSync(path.join(projectDir, '.cursor', 'mcp.json')));
       assert.ok(fs.existsSync(path.join(projectDir, '.cursor', 'hooks', 'session-start.js')));
@@ -162,7 +162,7 @@ function runTests() {
       assert.ok(state.resolution.selectedModules.includes('framework-language'));
       assert.ok(
         state.operations.some(operation => (
-          operation.destinationPath === path.join(normalizedProjectDir, '.cursor', 'commands', 'plan.md')
+          operation.destinationPath === path.join(normalizedProjectDir, '.cursor', 'commands', 'lab.md')
         )),
         'Should record manifest command file copy operation'
       );

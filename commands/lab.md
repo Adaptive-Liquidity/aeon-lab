@@ -59,7 +59,7 @@ Both forward to `POST /api/lab/submit` against the local FastAPI gateway when it
 
 - **Claude Code** picks up this file from `commands/lab.md` directly.
 - **Cursor** reads it through the workspace `commands/` surface and surfaces `/lab` in the slash menu.
-- **Codex CLI** uses the shim at `legacy-command-shims/commands/lab.md`, which forwards arguments to `python -m lab.api.cli`.
+- **Codex CLI** uses `.opencode/commands/lab.md` or `python -m lab.api.cli` directly.
 - **OpenCode** uses `.opencode/commands/lab.md`, which is the same content as this file.
 
 ## Exit States
