@@ -1,0 +1,31 @@
+# Lab cron schedule.
+#
+# Read by `lab/scripts/run-cron.js`, which is the entrypoint for both
+# system cron / Windows Task Scheduler / GitHub Actions runners. The
+# nightly architecture audit and the weekly skill-comply audit both call
+# the Python audit modules and write JSON + Markdown reports under
+# `~/.ecc/lab/audits/`.
+#
+# Override the schedules by re-running `lab/scripts/install-cron.js`.
+
+defaults:
+  shell: bash
+  cwd: ${ECC_ROOT}
+  timeout_seconds: 600
+
+jobs:
+  - name: agent-architecture-audit
+    description: Nightly health audit of agent stack, gates, and budgets.
+    schedule: "30 2 * * *"          # 02:30 local every day
+    command: python -m lab.audits.architecture_audit
+    on_failure: lab.audit_event
+  - name: skill-comply
+    description: Weekly sweep of skills/* + lesson candidates for frontmatter and behavioural drift.
+    schedule: "15 3 * * 1"          # 03:15 every Monday
+    command: python -m lab.audits.skill_comply_audit
+    on_failure: lab.audit_event
+  - name: learning-drain
+    description: Drain the continuous-learning queue and emit skill candidates.
+    schedule: "0 4 * * *"           # 04:00 daily
+    command: python -m lab.learning.cli
+    on_failure: lab.audit_event

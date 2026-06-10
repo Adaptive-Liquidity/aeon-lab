@@ -1,5 +1,6 @@
 mod comms;
 mod config;
+mod lab;
 mod notifications;
 mod observability;
 mod session;
@@ -435,6 +436,40 @@ enum Commands {
         #[arg(long)]
         cwd: PathBuf,
     },
+    /// Control the ECC + Claw autonomous lab subsystem
+    Lab {
+        #[command(subcommand)]
+        action: LabCommands,
+    },
+}
+
+#[derive(clap::Subcommand, Debug)]
+enum LabCommands {
+    /// Spawn lab worker, API gateway, and MCP broker as child processes
+    Up,
+    /// Stop every lab subsystem
+    Down,
+    /// Print supervisor status as JSON
+    Status,
+    /// Submit a work item via the lab API (forwards to ecc-lab CLI)
+    Submit {
+        /// Task title
+        title: String,
+        /// Optional description
+        #[arg(long)]
+        description: Option<String>,
+        /// Force research track
+        #[arg(long)]
+        research: bool,
+        /// Force engineering track
+        #[arg(long)]
+        engineering: bool,
+        /// Budget cap (USD)
+        #[arg(long, default_value_t = 50.0)]
+        budget: f64,
+    },
+    /// Verify provenance (project id or artifact path)
+    Verify { target: String },
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -1359,6 +1394,9 @@ async fn main() -> Result<()> {
     match cli.command {
         Some(Commands::Dashboard) | None => {
             tui::app::run(db, cfg).await?;
+        }
+        Some(Commands::Lab { action }) => {
+            lab::handle_command(action).await?;
         }
         Some(Commands::Start {
             task,

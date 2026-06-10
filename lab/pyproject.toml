@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecc-lab"
+version = "0.1.0"
+description = "ECC + Claw Autonomous Lab — unified zero-human workgroup"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Affaan Mustafa" }]
+
+dependencies = [
+  # Orchestration
+  "temporalio>=1.7.0",
+  "langgraph>=0.2.50",
+  "langchain-core>=0.3.0",
+
+  # API + frontend bridge
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.32.0",
+  "websockets>=13.0",
+  "pydantic>=2.9.0",
+
+  # Observability
+  "opentelemetry-api>=1.28.0",
+  "opentelemetry-sdk>=1.28.0",
+  "opentelemetry-instrumentation-fastapi>=0.49b0",
+  "opentelemetry-exporter-otlp>=1.28.0",
+  "langfuse>=2.50.0",
+
+  # Provenance
+  "cryptography>=43.0.0",
+
+  # MCP broker
+  "mcp>=1.0.0",
+  "httpx>=0.27.0",
+
+  # Sandboxes
+  "docker>=7.1.0",
+  "paramiko>=3.4.0",
+
+  # Storage
+  "aiosqlite>=0.20.0",
+  "sqlalchemy>=2.0.0",
+
+  # Config + parsing
+  "PyYAML>=6.0",
+  "tomli>=2.0.0",
+]
+
+[project.optional-dependencies]
+research = [
+  # Forward to Claw-AI-Lab researchclaw extras when physically vendored.
+  "torch",
+  "transformers",
+  "datasets",
+  "huggingface_hub",
+]
+
+dev = [
+  "pytest>=8.3.0",
+  "pytest-asyncio>=0.24.0",
+  "ruff>=0.7.0",
+]
+
+[project.scripts]
+ecc-lab = "lab.api.cli:main"
+ecc-lab-worker = "lab.orchestrator.worker:main"
+ecc-lab-broker = "lab.mcp_broker.proxy:main"
+ecc-lab-verify = "lab.provenance.verify:main"
+
+[tool.setuptools.packages.find]
+include = ["lab*"]
+exclude = ["lab.researchclaw.docker*", "lab.frontend*"]

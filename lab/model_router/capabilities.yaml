@@ -1,0 +1,126 @@
+# Model capability matrix for the lab.
+#
+# Rows are models; columns are capabilities and per-million-token costs (USD).
+# The router picks the cheapest model whose capability tier meets the
+# requested stage's cost_tier.
+#
+# Costs are *informational*; the cost-ledger records actual usage from
+# upstream invoker responses where available.
+
+models:
+  - name: claude-4.6-sonnet
+    provider: anthropic
+    tier: premium
+    context_window: 200000
+    cost_in_per_mtok: 3.0
+    cost_out_per_mtok: 15.0
+    capabilities: [reasoning, coding, vision, long_context, tools]
+
+  - name: claude-4.5-haiku
+    provider: anthropic
+    tier: standard
+    context_window: 200000
+    cost_in_per_mtok: 0.8
+    cost_out_per_mtok: 4.0
+    capabilities: [reasoning, coding, tools]
+
+  - name: claude-opus-4-8
+    provider: anthropic
+    tier: premium
+    context_window: 200000
+    cost_in_per_mtok: 15.0
+    cost_out_per_mtok: 75.0
+    capabilities: [reasoning, coding, vision, long_context, tools, planning]
+
+  - name: gpt-5.2-codex
+    provider: openai
+    tier: premium
+    context_window: 200000
+    cost_in_per_mtok: 5.0
+    cost_out_per_mtok: 20.0
+    capabilities: [reasoning, coding, tools]
+
+  - name: gpt-5.1
+    provider: openai
+    tier: standard
+    context_window: 128000
+    cost_in_per_mtok: 1.5
+    cost_out_per_mtok: 6.0
+    capabilities: [reasoning, coding, tools]
+
+  - name: gpt-5-mini
+    provider: openai
+    tier: cheap
+    context_window: 128000
+    cost_in_per_mtok: 0.2
+    cost_out_per_mtok: 0.8
+    capabilities: [reasoning, tools]
+
+  - name: gemini-3.1-pro
+    provider: google
+    tier: premium
+    context_window: 1000000
+    cost_in_per_mtok: 1.25
+    cost_out_per_mtok: 5.0
+    capabilities: [reasoning, coding, vision, long_context, tools]
+
+  - name: gemini-3-flash
+    provider: google
+    tier: cheap
+    context_window: 1000000
+    cost_in_per_mtok: 0.10
+    cost_out_per_mtok: 0.40
+    capabilities: [reasoning, vision, tools]
+
+  - name: grok-build-0.1
+    provider: xai
+    tier: standard
+    context_window: 256000
+    cost_in_per_mtok: 1.0
+    cost_out_per_mtok: 4.0
+    capabilities: [reasoning, coding, tools]
+
+  - name: kimi-k2.5
+    provider: moonshot
+    tier: cheap
+    context_window: 200000
+    cost_in_per_mtok: 0.30
+    cost_out_per_mtok: 1.0
+    capabilities: [reasoning, long_context]
+
+# Stage-specific preferences. The router walks this in order and picks the
+# first model meeting the tier requirement.
+stage_preferences:
+  research:
+    topic_init: [gpt-5-mini, claude-4.5-haiku]
+    problem_decompose: [claude-4.6-sonnet, gpt-5.1]
+    search_strategy: [gemini-3-flash, gpt-5-mini]
+    literature_collect: [gemini-3-flash, gpt-5-mini]
+    literature_screen: [claude-4.5-haiku, gpt-5.1]
+    knowledge_extract: [gemini-3.1-pro, claude-4.6-sonnet]
+    synthesis: [claude-4.6-sonnet, gpt-5.1]
+    hypothesis_gen: [claude-opus-4-8, claude-4.6-sonnet]
+    experiment_design: [claude-opus-4-8, gpt-5.2-codex]
+    code_generation: [gpt-5.2-codex, claude-4.6-sonnet]
+    sanity_check: [gpt-5-mini, claude-4.5-haiku]
+    experiment_run: [claude-4.5-haiku, gpt-5.1]
+    iterative_refine: [claude-4.6-sonnet, gpt-5.2-codex]
+    result_analysis: [claude-4.6-sonnet, gpt-5.1]
+    research_decision: [claude-4.6-sonnet]
+    paper_draft: [claude-opus-4-8, claude-4.6-sonnet]
+    peer_review: [claude-4.6-sonnet, gpt-5.1]
+    quality_gate: [claude-4.6-sonnet, gpt-5.1]
+    citation_verify: [gpt-5-mini]
+    default: [claude-4.5-haiku, gpt-5.1]
+  engineering:
+    intake: [gpt-5-mini]
+    research_reuse: [gemini-3-flash, gpt-5-mini]
+    plan: [claude-4.6-sonnet, gpt-5.1]
+    scaffold: [gpt-5.2-codex, claude-4.6-sonnet]
+    implement: [gpt-5.2-codex, claude-4.6-sonnet]
+    review: [claude-4.6-sonnet, gpt-5.1]
+    commit: [gpt-5-mini]
+    default: [claude-4.5-haiku, gpt-5.1]
+
+defaults:
+  fallback_model: claude-4.5-haiku

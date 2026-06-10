@@ -1,0 +1,31 @@
+{
+  "$schema": "../lab/schemas/lab-hooks.schema.json",
+  "description": "ECC + Claw lab hook routes. Consumed by scripts/hooks/lab-event-router.js.",
+  "hooks": [
+    {
+      "id": "lab:otel:every-event",
+      "matcher": { "type": "lab.stage_event" },
+      "command": ["node", "scripts/hooks/lab-otel-emit.js"]
+    },
+    {
+      "id": "lab:cost-ledger:cost-event",
+      "matcher": { "type": "lab.stage_event", "event": "succeeded" },
+      "command": ["node", "scripts/hooks/lab-cost-record.js"]
+    },
+    {
+      "id": "lab:continuous-learning:on-complete",
+      "matcher": { "type": "lab.stage_event", "event": "gate_passed" },
+      "command": ["node", "scripts/hooks/lab-learning-emit.js"]
+    },
+    {
+      "id": "lab:rollback:audit",
+      "matcher": { "type": "lab.stage_event", "event": "rollback" },
+      "command": ["node", "scripts/hooks/lab-audit-rollback.js"]
+    },
+    {
+      "id": "lab:audit:record",
+      "matcher": { "type": "lab.audit_event" },
+      "command": ["node", "scripts/hooks/lab-audit-record.js"]
+    }
+  ]
+}
